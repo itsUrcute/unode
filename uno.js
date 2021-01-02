@@ -9,18 +9,33 @@ for(let x in cards){
         fulldeck.push(x);//full deck of cards(shows repeating cards seperately)
     }
 }
+shuffle(fulldeck);
 
-start()
+start();
+
+//Function to shuffle an array.
+function shuffle(array) {
+    var currentIndex = array.length, temporaryValue, randomIndex;
+    // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
 
 function start(){
-    global.totalPlayers = rl.question("UNO!!!\n\nEnter the number of players ")
+    global.totalPlayers = rl.question("UNO!!!\n\nEnter the number of players ");
     global.players = {};
     for(let i=1;i<=totalPlayers;i++){
         let tempdeck = [];
         for(let i=0;i<7;i++){
-            rannum = Math.floor(Math.random()*fulldeck.length);
-            tempdeck.push(fulldeck[rannum]);
-            fulldeck.splice(rannum,1);
+            tempdeck.push(fulldeck.pop());
         }
         players[`deck${i}`] = tempdeck;
     }
@@ -32,18 +47,18 @@ function start(){
 }
 
 function placePrompt(){
-    console.log(`Player ${currentPlayer}`)
+    console.log(`Player ${currentPlayer}`);
     console.log(`Current Card is ${topCard}\nYour deck is ${players[`deck${currentPlayer}`]}\n`);
-    let cardName = rl.question("Which card do you wanna place? ")
+    let cardName = rl.question("Which card do you wanna place? ");
         if(cardName.toLowerCase() == "draw" && !drawn){
             draw();
         }
         else if(cardName.toLowerCase() == "draw" && drawn){
-            console.log("Can only draw 1 time")
-            unoskip()
+            console.log("Can only draw 1 time");
+            unoskip();
         }
         else if(cardName.toLowerCase() == "skip" && drawn){
-            drawskip()
+            drawskip();
         }
         else if(!(players[`deck${currentPlayer}`].includes(cardName))){
             console.log("Invalid card\n");
@@ -60,14 +75,14 @@ function placePrompt(){
 
 async function placed(cardName){
     console.log(`${cardName} has been placed\n`);
-    players[`deck${currentPlayer}`].splice(players[`deck${currentPlayer}`].indexOf(cardName),1)
+    players[`deck${currentPlayer}`].splice(players[`deck${currentPlayer}`].indexOf(cardName),1);
     drawn = false;
     if(players[`deck${currentPlayer}`].length == 1){
-        console.log("UNO!")
+        console.log("UNO!");
     }
     else if(players[`deck${currentPlayer}`].length == 0){
-        console.log(`Victory!!!\nPlayer${currentPlayer} has won the game!`)
-        process.exit(0)
+        console.log(`Victory!!!\nPlayer${currentPlayer} has won the game!`);
+        process.exit(0);
     }
     if(!['wc','wd'].includes(topCard) || !['red','green','yellow','blue'].includes(topCard) ){
         topCard = cardName;
@@ -76,17 +91,17 @@ async function placed(cardName){
         topCard = tempcol;
     }
     if(cards[cardName].wild){
-        unowild()
+        unowild();
     }
     if(cards[cardName].reverse){
-        unoreverse()
+        unoreverse();
     }
     if(cards[cardName].pull){
-        unopull(cardName)
+        unopull(cardName);
     }
 
     if(cards[cardName].skip){
-        unoskip()
+        unoskip();
     }
 
     else{  
@@ -98,21 +113,21 @@ async function placed(cardName){
 
 function unoreverse(){
     reverse = !reverse;
-    console.log(`Uno Reverse!`)
+    console.log(`Uno Reverse!`);
     currentPlayer = !reverse && currentPlayer+1<=totalPlayers?currentPlayer+1:!reverse && currentPlayer+1>=totalPlayers?1:reverse && currentPlayer-1<1?totalPlayers:reverse && currentPlayer-1>0?currentPlayer-1:null;
     nextPlayer = !reverse && currentPlayer+1<=totalPlayers?currentPlayer+1:!reverse && currentPlayer+1>=totalPlayers?1:reverse && currentPlayer-1<1?totalPlayers:reverse && currentPlayer-1>0?currentPlayer-1:null;
     placePrompt(topCard,currentPlayer,players,totalPlayers);
 }
 
 function unoskip(){
-    console.log(`Skipped Player${nextPlayer}`)
+    console.log(`Skipped Player${nextPlayer}`);
     currentPlayer = !reverse && currentPlayer+2<=totalPlayers?currentPlayer+2:!reverse && currentPlayer+2>=totalPlayers?currentPlayer+2-totalPlayers:reverse && currentPlayer-2<1?totalPlayers-(currentPlayer-2):reverse && currentPlayer-2>0?currentPlayer-2:null;
     nextPlayer = !reverse && currentPlayer+1<=totalPlayers?currentPlayer+1:!reverse && currentPlayer+1>=totalPlayers?1:reverse && currentPlayer-1<1?totalPlayers:reverse && currentPlayer-1>0?currentPlayer-1:null;
     placePrompt(topCard,currentPlayer,players,totalPlayers);
 }
 
 function unopull(cardName){
-    console.log(`Player${nextPlayer} had to draw ${cards[cardName].pull} cards`)
+    console.log(`Player${nextPlayer} had to draw ${cards[cardName].pull} cards`);
     for(let i=0;i<cards[cardName].pull;i++){
         rannum = Math.floor(Math.random()*fulldeck.length);
         players[`deck${nextPlayer}`].push(fulldeck[rannum]);
@@ -121,9 +136,9 @@ function unopull(cardName){
 }
 
 function unowild(){
-    let nextcolor = rl.question("What color should the next card be? ")
+    let nextcolor = rl.question("What color should the next card be? ");
         if(['red','green','yellow','blue'].includes(nextcolor.toLowerCase())){
-            global.tempcol = nextcolor.toLowerCase()
+            global.tempcol = nextcolor.toLowerCase();
             topCard = tempcol;
             placePrompt();
         }
@@ -133,9 +148,7 @@ function unowild(){
 }
 
 function draw(){
-    rannum = Math.floor(Math.random()*fulldeck.length);
-    players[`deck${currentPlayer}`].push(fulldeck[rannum]);
-    fulldeck.splice(rannum,1);
+    players[`deck${currentPlayer}`].push(fulldeck.pop());
     drawn = true;
     placePrompt();
 
