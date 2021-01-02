@@ -75,6 +75,7 @@ function placePrompt(){
 
 async function placed(cardName){
     console.log(`${cardName} has been placed\n`);
+    fulldeck.push(cardName)
     players[`deck${currentPlayer}`].splice(players[`deck${currentPlayer}`].indexOf(cardName),1);
     drawn = false;
     if(players[`deck${currentPlayer}`].length == 1){
@@ -105,10 +106,14 @@ async function placed(cardName){
     }
 
     else{  
-        currentPlayer = !reverse && currentPlayer+1<=totalPlayers?currentPlayer+1:!reverse && currentPlayer+1>=totalPlayers?1:reverse && currentPlayer-1<1?totalPlayers:reverse && currentPlayer-1>0?currentPlayer-1:null;
-        nextPlayer = !reverse && currentPlayer+1<=totalPlayers?currentPlayer+1:!reverse && currentPlayer+1>=totalPlayers?1:reverse && currentPlayer-1<1?totalPlayers:reverse && currentPlayer-1>0?currentPlayer-1:null;
-        placePrompt(topCard,currentPlayer,players,totalPlayers);
+        afterplace();
+    }
 }
+
+function afterplace(){
+    currentPlayer = !reverse && currentPlayer+1<=totalPlayers?currentPlayer+1:!reverse && currentPlayer+1>=totalPlayers?1:reverse && currentPlayer-1<1?totalPlayers:reverse && currentPlayer-1>0?currentPlayer-1:null;
+    nextPlayer = !reverse && currentPlayer+1<=totalPlayers?currentPlayer+1:!reverse && currentPlayer+1>=totalPlayers?1:reverse && currentPlayer-1<1?totalPlayers:reverse && currentPlayer-1>0?currentPlayer-1:null;
+    placePrompt(topCard,currentPlayer,players,totalPlayers);
 }
 
 function unoreverse(){
@@ -127,11 +132,13 @@ function unoskip(){
 }
 
 function unopull(cardName){
+    if(fulldeck.length<cards[cardName].pull){
+        console.log("the deck doesn\'t have enough cards left");
+        afterplace();
+    }
     console.log(`Player${nextPlayer} had to draw ${cards[cardName].pull} cards`);
     for(let i=0;i<cards[cardName].pull;i++){
-        rannum = Math.floor(Math.random()*fulldeck.length);
-        players[`deck${nextPlayer}`].push(fulldeck[rannum]);
-        fulldeck.splice(rannum,1);
+        players[`deck${nextPlayer}`].push(fulldeck.pop());
     }
 }
 
@@ -148,6 +155,10 @@ function unowild(){
 }
 
 function draw(){
+    if(fulldeck.length==0){
+        console.log("the deck doesn\'t have enough cards left");
+        afterplace();
+    }
     players[`deck${currentPlayer}`].push(fulldeck.pop());
     drawn = true;
     placePrompt();
