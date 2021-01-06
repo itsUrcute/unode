@@ -180,8 +180,7 @@ async function unowild(){
 
 function draw(){
     if(drawn){
-        drawn = false;
-        drawskip()
+    drawskip()
     }
     else if(fulldeck.length==0){
         console.log("the deck doesn\'t have enough cards left");
