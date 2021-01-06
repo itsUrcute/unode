@@ -1,0 +1,44 @@
+* {
+    box-sizing: border-box;
+    font-family: Raleway;
+    color: #666;
+}
+
+html, body{
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    background-color: azure;
+}
+
+.board{
+    height: 40vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+
+}
+
+.deckholder{
+    height: 40vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    background-color: bisque;
+}
+
+.card{
+    height: 32vh;
+    width: auto;
+    margin: auto 10px auto 10px;
+}
+
+.other{
+    height: 40vh;
+    width: 100vw;
+    display: flex;
+    justify-content: left;
+    background-color: antiquewhite;
+}

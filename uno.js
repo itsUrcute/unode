@@ -31,6 +31,15 @@ function shuffle(array) {
 
 function start(){
     global.totalPlayers = rl.question("UNO!!!\n\nEnter the number of players ");
+    if(isNaN(parseInt(totalPlayers))){
+        console.log("\ninvalid number");
+        start();
+    }
+    let check = totalPlayers>1?totalPlayers<16?true:false:false;
+    if(!check){
+        console.log("\nenter a number between 1 and 16");6
+        start()
+    }
     global.players = {};
     for(let i=1;i<=totalPlayers;i++){
         let tempdeck = [];
