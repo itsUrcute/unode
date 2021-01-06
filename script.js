@@ -60,7 +60,7 @@ else{
 
 function ready(){
     document.getElementsByClassName('pull-card')[0].addEventListener('click',draw)
-    document.getElementsByClassName('skip-card')[0].addEventListener('click',drawskip)
+    document.getElementsByClassName('skip-button')[0].addEventListener('click',drawskip)
     let initBoard = document.getElementsByClassName("board")[0];
     initBoard.innerHTML = `<img class = "top-card card" src = "card_images/${topCard}.png">`
     mainDeck = document.getElementsByClassName("main-deck-card");
