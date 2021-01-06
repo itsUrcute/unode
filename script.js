@@ -186,7 +186,8 @@ function draw(){
         console.log("the deck doesn\'t have enough cards left");
         afterplace();
     }
-    else{ 
+    else{
+        shuffle(fulldeck);
         players[`deck${currentPlayer}`].push(fulldeck.pop());
         drawn = true;
         deckCreate();
